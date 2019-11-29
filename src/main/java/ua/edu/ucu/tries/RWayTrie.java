@@ -1,13 +1,17 @@
 package ua.edu.ucu.tries;
 
+import ua.edu.ucu.tries.iterators.BreadthFirstIteratorNumber;
+
 public class RWayTrie implements Trie {
 
     private static int r = 26;
+    private int size = 0;
     private Node root;
 
     @Override
     public void add(Tuple tuple) {
         root = put(root, tuple, 0);
+        ++size;
     }
 
     private Node put(Node node, Tuple tuple, int d) {
@@ -23,8 +27,10 @@ public class RWayTrie implements Trie {
     }
 
     public Node get(String key) {
+        if (key == null) {
+            return root;
+        }
         Node node = get(root, key, 0);
-        if (node == null) return null;
         return node;
     }
 
@@ -37,6 +43,12 @@ public class RWayTrie implements Trie {
 
     @Override
     public boolean delete(String word) {
+        boolean res = del(word);
+        if (res) { --size; }
+        return res;
+    }
+
+    private boolean del(String word) {
         int wLength = word.length();
         Node[] wordInTree = new Node[wLength];
         wordInTree[0] = get(root, word, 0);
@@ -69,21 +81,17 @@ public class RWayTrie implements Trie {
 
     @Override
     public Iterable<String> words() {
-        return wordsWithPrefix("");
+        return wordsWithPrefix(null);
     }
 
     @Override
     public Iterable<String> wordsWithPrefix(String s) {
-        Node startNode = root;
-        if (s != "") {
-            startNode = get(s);
-        }
-        
+        return BreadthFirstIteratorNumber.wordsWithPrefix(this, s);
     }
 
     @Override
     public int size() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return size;
     }
 
 }

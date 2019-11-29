@@ -14,6 +14,8 @@ public class Node {
 
     public Tuple getValue() { return value; }
 
+    public Node[] getNext() { return next; }
+
     public Node getNext(char ch) { return next[ch - 97]; }
 
     public boolean hasNextExcept(Node next) {
@@ -24,5 +26,9 @@ public class Node {
             }
         }
         return res;
+    }
+
+    public boolean isWord() {
+        return value.getTerm() != null;
     }
 }
